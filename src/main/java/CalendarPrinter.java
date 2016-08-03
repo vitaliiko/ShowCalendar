@@ -1,6 +1,5 @@
 import java.time.*;
 import java.time.format.TextStyle;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.IsoFields;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -25,8 +24,18 @@ public class CalendarPrinter {
         this.month = month;
     }
 
+    public CalendarPrinter(int month) {
+        this.year = currentDate.getYear();
+        this.month = month;
+    }
+
+    public CalendarPrinter() {
+        this.year = currentDate.getYear();
+        this.month = currentDate.getMonthValue();
+    }
+
     public void printMonth() {
-        ZonedDateTime zonedDateTime = createZonedDateTime();
+        ZonedDateTime zonedDateTime = createDefaultZonedDateTime();
         int startDayOfWeek = zonedDateTime.getDayOfWeek().getValue();
         boolean isLeap = Year.isLeap(zonedDateTime.getYear());
         int monthLength = zonedDateTime.getMonth().length(isLeap);
@@ -68,17 +77,17 @@ public class CalendarPrinter {
     }
 
     private boolean isCurrentDate(int day) {
-        ZonedDateTime zonedDateTime = createZonedDateTime(day);
+        ZonedDateTime zonedDateTime = createDefaultZonedDateTime(day);
         return zonedDateTime.getYear() == currentDate.getYear()
                 && zonedDateTime.getMonthValue() == currentDate.getMonthValue()
                 && zonedDateTime.getDayOfMonth() == currentDate.getDayOfMonth();
     }
 
-    private ZonedDateTime createZonedDateTime() {
+    private ZonedDateTime createDefaultZonedDateTime() {
         return ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, ZONE_ID);
     }
 
-    private ZonedDateTime createZonedDateTime(int day) {
+    private ZonedDateTime createDefaultZonedDateTime(int day) {
         return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, ZONE_ID);
     }
 
