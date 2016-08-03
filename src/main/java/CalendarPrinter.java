@@ -16,21 +16,25 @@ public class CalendarPrinter {
         String startMonthLine = createStartMonthLine(startDayOfWeek);
 
         printDaysOfWeek();
-        int dayOfWeek = startDayOfWeek;
-        for (int i = 1; i <= monthLength; i++) {
-            String dayOfMonth = String.valueOf(i);
-            dayOfMonth = dayOfMonth.length() == 1 ? " " + dayOfMonth : dayOfMonth;
+        final int[] dayOfWeek = {startDayOfWeek};
+        IntStream.rangeClosed(1, monthLength).forEach(i -> {
             if (i == 1) {
                 System.out.print(startMonthLine);
             }
-            System.out.print(dayOfMonth + " | ");
-            if (dayOfWeek % 7 == 0) {
+            printDay(i);
+            if (dayOfWeek[0] % 7 == 0) {
                 System.out.println();
-                dayOfWeek = 0;
+                dayOfWeek[0] = 0;
                 System.out.println("----------------------------------");
             }
-            dayOfWeek++;
-        }
+            dayOfWeek[0]++;
+        });
+    }
+
+    private static void printDay(int i) {
+        String dayOfMonth = String.valueOf(i);
+        dayOfMonth = dayOfMonth.length() == 1 ? " " + dayOfMonth : dayOfMonth;
+        System.out.print(dayOfMonth + " | ");
     }
 
     private static ZonedDateTime createZonedDateTime(int year, int month) {
@@ -39,11 +43,9 @@ public class CalendarPrinter {
     }
 
     private static String createStartMonthLine(int startDayOfWeek) {
-        String startLine = "";
-        for (int i = 0; i < startDayOfWeek - 1; i++) {
-            startLine += "     ";
-        }
-        return startLine;
+        final String[] startLine = {""};
+        IntStream.rangeClosed(1, startDayOfWeek - 1).forEach(i -> startLine[0] += "     ");
+        return startLine[0];
     }
 
     private static void printDaysOfWeek() {
