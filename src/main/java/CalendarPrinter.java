@@ -42,6 +42,7 @@ public class CalendarPrinter {
         int weekOfYear = zonedDateTime.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         String startMonthLine = createStartMonthLine(startDayOfWeek);
 
+        printTitle(zonedDateTime);
         printFirstLine();
         int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
@@ -56,6 +57,13 @@ public class CalendarPrinter {
             }
             dayOfWeek++;
         }
+        System.out.println(HORIZONTAL_LINE_DELIMITER);
+    }
+
+    private void printTitle(ZonedDateTime zonedDateTime) {
+        System.out.println();
+        System.out.print(zonedDateTime.getMonth().getDisplayName(TextStyle.FULL, LOCALE) + ", " + zonedDateTime.getYear());
+        System.out.println(HORIZONTAL_LINE_DELIMITER);
     }
 
     private void createNewLine(int weekOfYear) {
