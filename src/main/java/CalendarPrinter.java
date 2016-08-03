@@ -1,16 +1,21 @@
+import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.TextStyle;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class CalendarPrinter {
 
+    public static final Locale LOCALE = Locale.ENGLISH;
+
     public static void printMonth(int year, int month) {
         ZonedDateTime zonedDateTime = createZonedDateTime(year, month);
-
         int startDayOfWeek = zonedDateTime.getDayOfWeek().getValue();
         int monthLength = zonedDateTime.getMonth().length(true);
-
         String startMonthLine = createStartMonthLine(startDayOfWeek);
 
+        printDaysOfWeek();
         int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
             String dayOfMonth = String.valueOf(i);
@@ -39,5 +44,14 @@ public class CalendarPrinter {
             startLine += "     ";
         }
         return startLine;
+    }
+
+    private static void printDaysOfWeek() {
+        IntStream.rangeClosed(1, 7).forEach(i -> {
+                DayOfWeek dayOfWeek = DayOfWeek.of(i);
+                String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LOCALE) + "| ";
+                System.out.print(day);
+        });
+        System.out.println();
     }
 }
