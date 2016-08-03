@@ -21,33 +21,33 @@ public class CalendarPrinter {
         int startDayOfWeek = zonedDateTime.getDayOfWeek().getValue();
         boolean isLeap = Year.isLeap(zonedDateTime.getYear());
         int monthLength = zonedDateTime.getMonth().length(isLeap);
-        final int[] weekOfYear = {zonedDateTime.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR)};
+        int weekOfYear = zonedDateTime.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
         String startMonthLine = createStartMonthLine(startDayOfWeek);
 
         printFirstLine();
-        final int[] dayOfWeek = {startDayOfWeek};
+        int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
             if (i == 1) {
-                printWeekNumber(weekOfYear);
+                weekOfYear = printWeekNumber(weekOfYear);
                 System.out.print(startMonthLine);
             }
-            printDay(i, dayOfWeek[0]);
-            if (dayOfWeek[0] % 7 == 0) {
-                createNewLine(weekOfYear, dayOfWeek);
+            printDay(i, dayOfWeek);
+            if (dayOfWeek % 7 == 0) {
+                createNewLine(weekOfYear);
+                dayOfWeek = 0;
             }
-            dayOfWeek[0]++;
+            dayOfWeek++;
         }
     }
 
-    private static void createNewLine(int[] weekOfYear, int[] dayOfWeek) {
-        dayOfWeek[0] = 0;
+    private static void createNewLine(int weekOfYear) {
         System.out.println(DEFAULT_COLOR + HORIZONTAL_LINE_DELIMITER);
         printWeekNumber(weekOfYear);
     }
 
-    private static void printWeekNumber(int[] weekOfYear) {
-        System.out.print(WEEK_NUMBER_COLOR + weekOfYear[0] + "  | " + DEFAULT_COLOR);
-        weekOfYear[0]++;
+    private static int printWeekNumber(int weekOfYear) {
+        System.out.print(WEEK_NUMBER_COLOR + weekOfYear + "  | " + DEFAULT_COLOR);
+        return weekOfYear++;
     }
 
     private static void printDay(int i, int dayOfWeek) {
