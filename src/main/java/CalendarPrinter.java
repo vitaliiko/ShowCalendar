@@ -38,15 +38,14 @@ public class CalendarPrinter {
 
         printTitle(zonedDateTime);
         printFirstLine();
+        printWeekNumber(weekOfYear++);
+        System.out.print(startMonthLine);
+
         int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
-            if (i == 1) {
-                weekOfYear = printWeekNumber(weekOfYear);
-                System.out.print(startMonthLine);
-            }
             printDay(i, dayOfWeek);
             if (dayOfWeek % 7 == 0) {
-                createNewLine(weekOfYear);
+                createNewLine(weekOfYear++);
                 dayOfWeek = 0;
             }
             dayOfWeek++;
@@ -66,9 +65,8 @@ public class CalendarPrinter {
         printWeekNumber(weekOfYear);
     }
 
-    private int printWeekNumber(int weekOfYear) {
+    private void printWeekNumber(int weekOfYear) {
         System.out.print(ConsoleUtils.WEEK_NUMBER_COLOR + weekOfYear + "  | " + ConsoleUtils.DEFAULT_COLOR);
-        return weekOfYear++;
     }
 
     private void printDay(int day, int dayOfWeek) {
