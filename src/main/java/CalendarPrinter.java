@@ -1,3 +1,5 @@
+import utils.ConsoleUtils;
+
 import java.time.*;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
@@ -9,12 +11,6 @@ public class CalendarPrinter {
     public static final Locale LOCALE = Locale.ENGLISH;
     public static final ZoneId ZONE_ID = ZoneId.of(ZoneId.SHORT_IDS.get("ART"));
     public static final ZonedDateTime currentDate = ZonedDateTime.now(ZONE_ID);
-
-    public static final String HORIZONTAL_LINE_DELIMITER = "\n----------------------------------------";
-    public static final String WEEKEND_COLOR = "\u001B[31m";
-    public static final String CURRENT_DATE_COLOR = "\u001B[36m";
-    public static final String DEFAULT_COLOR = "\u001B[0m";
-    public static final String WEEK_NUMBER_COLOR = "\u001B[32m";
 
     private int year;
     private int month;
@@ -57,30 +53,30 @@ public class CalendarPrinter {
             }
             dayOfWeek++;
         }
-        System.out.println(HORIZONTAL_LINE_DELIMITER);
+        System.out.println(ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
     }
 
     private void printTitle(ZonedDateTime zonedDateTime) {
         System.out.println();
         System.out.print(zonedDateTime.getMonth().getDisplayName(TextStyle.FULL, LOCALE) + ", " + zonedDateTime.getYear());
-        System.out.println(HORIZONTAL_LINE_DELIMITER);
+        System.out.println(ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
     }
 
     private void createNewLine(int weekOfYear) {
-        System.out.println(DEFAULT_COLOR + HORIZONTAL_LINE_DELIMITER);
+        System.out.println(ConsoleUtils.DEFAULT_COLOR + ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
         printWeekNumber(weekOfYear);
     }
 
     private int printWeekNumber(int weekOfYear) {
-        System.out.print(WEEK_NUMBER_COLOR + weekOfYear + "  | " + DEFAULT_COLOR);
+        System.out.print(ConsoleUtils.WEEK_NUMBER_COLOR + weekOfYear + "  | " + ConsoleUtils.DEFAULT_COLOR);
         return weekOfYear++;
     }
 
     private void printDay(int day, int dayOfWeek) {
         String dayOfMonth = String.valueOf(day);
         dayOfMonth = dayOfMonth.length() == 1 ? " " + dayOfMonth : dayOfMonth;
-        dayOfMonth = dayOfWeek > 5 ? WEEKEND_COLOR + dayOfMonth : DEFAULT_COLOR + dayOfMonth;
-        dayOfMonth = isCurrentDate(day) ? CURRENT_DATE_COLOR + dayOfMonth : dayOfMonth;
+        dayOfMonth = dayOfWeek > 5 ? ConsoleUtils.WEEKEND_COLOR + dayOfMonth : ConsoleUtils.DEFAULT_COLOR + dayOfMonth;
+        dayOfMonth = isCurrentDate(day) ? ConsoleUtils.CURRENT_DATE_COLOR + dayOfMonth : dayOfMonth;
         System.out.print(dayOfMonth + " | ");
     }
 
@@ -106,12 +102,12 @@ public class CalendarPrinter {
     }
 
     private void printFirstLine() {
-        System.out.print(WEEK_NUMBER_COLOR + "Week| ");
+        System.out.print(ConsoleUtils.WEEK_NUMBER_COLOR + "Week| ");
         IntStream.rangeClosed(1, 7).forEach(i -> {
                 DayOfWeek dayOfWeek = DayOfWeek.of(i);
                 String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LOCALE) + "| ";
-                System.out.print(i > 5 ? WEEKEND_COLOR + day : DEFAULT_COLOR + day);
+                System.out.print(i > 5 ? ConsoleUtils.WEEKEND_COLOR + day : ConsoleUtils.DEFAULT_COLOR + day);
         });
-        System.out.println(DEFAULT_COLOR + HORIZONTAL_LINE_DELIMITER);
+        System.out.println(ConsoleUtils.DEFAULT_COLOR + ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
     }
 }
