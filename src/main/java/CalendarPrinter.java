@@ -1,5 +1,6 @@
 import java.time.*;
 import java.time.format.TextStyle;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.IsoFields;
 import java.util.*;
 import java.util.stream.IntStream;
@@ -16,8 +17,16 @@ public class CalendarPrinter {
     public static final String DEFAULT_COLOR = "\u001B[0m";
     public static final String WEEK_NUMBER_COLOR = "\u001B[32m";
 
-    public static void printMonth(int year, int month) {
-        ZonedDateTime zonedDateTime = createZonedDateTime(year, month);
+    private int year;
+    private int month;
+
+    public CalendarPrinter(int year, int month) {
+        this.year = year;
+        this.month = month;
+    }
+
+    public void printMonth() {
+        ZonedDateTime zonedDateTime = createZonedDateTime();
         int startDayOfWeek = zonedDateTime.getDayOfWeek().getValue();
         boolean isLeap = Year.isLeap(zonedDateTime.getYear());
         int monthLength = zonedDateTime.getMonth().length(isLeap);
@@ -40,38 +49,46 @@ public class CalendarPrinter {
         }
     }
 
-    private static void createNewLine(int weekOfYear) {
+    private void createNewLine(int weekOfYear) {
         System.out.println(DEFAULT_COLOR + HORIZONTAL_LINE_DELIMITER);
         printWeekNumber(weekOfYear);
     }
 
-    private static int printWeekNumber(int weekOfYear) {
+    private int printWeekNumber(int weekOfYear) {
         System.out.print(WEEK_NUMBER_COLOR + weekOfYear + "  | " + DEFAULT_COLOR);
         return weekOfYear++;
     }
 
-    private static void printDay(int i, int dayOfWeek) {
-        String dayOfMonth = String.valueOf(i);
+    private void printDay(int day, int dayOfWeek) {
+        String dayOfMonth = String.valueOf(day);
         dayOfMonth = dayOfMonth.length() == 1 ? " " + dayOfMonth : dayOfMonth;
         dayOfMonth = dayOfWeek > 5 ? WEEKEND_COLOR + dayOfMonth : DEFAULT_COLOR + dayOfMonth;
+        dayOfMonth = isCurrentDate(day) ? CURRENT_DATE_COLOR + dayOfMonth : dayOfMonth;
         System.out.print(dayOfMonth + " | ");
     }
 
-    private static ZonedDateTime createZonedDateTime(int year, int month) {
+    private boolean isCurrentDate(int day) {
+        ZonedDateTime zonedDateTime = createZonedDateTime(day);
+        return zonedDateTime.getYear() == currentDate.getYear()
+                && zonedDateTime.getMonthValue() == currentDate.getMonthValue()
+                && zonedDateTime.getDayOfMonth() == currentDate.getDayOfMonth();
+    }
+
+    private ZonedDateTime createZonedDateTime() {
         return ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, ZONE_ID);
     }
 
-    private static ZonedDateTime createZonedDateTime(int year, int month, int day) {
+    private ZonedDateTime createZonedDateTime(int day) {
         return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, ZONE_ID);
     }
 
-    private static String createStartMonthLine(int startDayOfWeek) {
+    private String createStartMonthLine(int startDayOfWeek) {
         final String[] startLine = {""};
         IntStream.rangeClosed(1, startDayOfWeek - 1).forEach(i -> startLine[0] += "     ");
         return startLine[0];
     }
 
-    private static void printFirstLine() {
+    private void printFirstLine() {
         System.out.print(WEEK_NUMBER_COLOR + "Week| ");
         IntStream.rangeClosed(1, 7).forEach(i -> {
                 DayOfWeek dayOfWeek = DayOfWeek.of(i);

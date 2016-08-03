@@ -2,6 +2,7 @@
 public class Main {
 
     public static void main(String[] args) {
-        CalendarPrinter.printMonth(2016, 11);
+        CalendarPrinter calendarPrinter = new CalendarPrinter(2016, 8);
+        calendarPrinter.printMonth();
     }
 }
