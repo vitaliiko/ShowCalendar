@@ -1,4 +1,5 @@
 import org.apache.commons.lang3.StringUtils;
+import utils.ConsoleConstants;
 import utils.LocaleDateUtils;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ public class Main {
         try {
             performCalendarPrint(args);
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            System.out.println(ConsoleConstants.ERROR_COLOR + e.getMessage());
         }
     }
 
