@@ -1,16 +1,14 @@
 import utils.ConsoleUtils;
+import utils.LocaleDateUtils;
 
-import java.time.*;
+import java.time.DayOfWeek;
+import java.time.Year;
+import java.time.ZonedDateTime;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
-import java.util.*;
 import java.util.stream.IntStream;
 
 public class CalendarPrinter {
-
-    public static final Locale LOCALE = Locale.ENGLISH;
-    public static final ZoneId ZONE_ID = ZoneId.of(ZoneId.SHORT_IDS.get("ART"));
-    public static final ZonedDateTime currentDate = ZonedDateTime.now(ZONE_ID);
 
     private int year;
     private int month;
@@ -21,13 +19,13 @@ public class CalendarPrinter {
     }
 
     public CalendarPrinter(int month) {
-        this.year = currentDate.getYear();
+        this.year = LocaleDateUtils.CURRENT_DATE.getYear();
         this.month = month;
     }
 
     public CalendarPrinter() {
-        this.year = currentDate.getYear();
-        this.month = currentDate.getMonthValue();
+        this.year = LocaleDateUtils.CURRENT_DATE.getYear();
+        this.month = LocaleDateUtils.CURRENT_DATE.getMonthValue();
     }
 
     public void printMonth() {
@@ -58,7 +56,8 @@ public class CalendarPrinter {
 
     private void printTitle(ZonedDateTime zonedDateTime) {
         System.out.println();
-        System.out.print(zonedDateTime.getMonth().getDisplayName(TextStyle.FULL, LOCALE) + ", " + zonedDateTime.getYear());
+        System.out.print(zonedDateTime.getMonth().getDisplayName(TextStyle.FULL, LocaleDateUtils.LOCALE) + ", "
+                + zonedDateTime.getYear());
         System.out.println(ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
     }
 
@@ -82,17 +81,17 @@ public class CalendarPrinter {
 
     private boolean isCurrentDate(int day) {
         ZonedDateTime zonedDateTime = createDefaultZonedDateTime(day);
-        return zonedDateTime.getYear() == currentDate.getYear()
-                && zonedDateTime.getMonthValue() == currentDate.getMonthValue()
-                && zonedDateTime.getDayOfMonth() == currentDate.getDayOfMonth();
+        return zonedDateTime.getYear() == LocaleDateUtils.CURRENT_DATE.getYear()
+                && zonedDateTime.getMonthValue() == LocaleDateUtils.CURRENT_DATE.getMonthValue()
+                && zonedDateTime.getDayOfMonth() == LocaleDateUtils.CURRENT_DATE.getDayOfMonth();
     }
 
     private ZonedDateTime createDefaultZonedDateTime() {
-        return ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, ZONE_ID);
+        return ZonedDateTime.of(year, month, 1, 0, 0, 0, 0, LocaleDateUtils.ZONE_ID);
     }
 
     private ZonedDateTime createDefaultZonedDateTime(int day) {
-        return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, ZONE_ID);
+        return ZonedDateTime.of(year, month, day, 0, 0, 0, 0, LocaleDateUtils.ZONE_ID);
     }
 
     private String createStartMonthLine(int startDayOfWeek) {
@@ -105,7 +104,7 @@ public class CalendarPrinter {
         System.out.print(ConsoleUtils.WEEK_NUMBER_COLOR + "Week| ");
         IntStream.rangeClosed(1, 7).forEach(i -> {
                 DayOfWeek dayOfWeek = DayOfWeek.of(i);
-                String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LOCALE) + "| ";
+                String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LocaleDateUtils.LOCALE) + "| ";
                 System.out.print(i > 5 ? ConsoleUtils.WEEKEND_COLOR + day : ConsoleUtils.DEFAULT_COLOR + day);
         });
         System.out.println(ConsoleUtils.DEFAULT_COLOR + ConsoleUtils.HORIZONTAL_LINE_DELIMITER);
