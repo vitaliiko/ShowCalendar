@@ -19,7 +19,7 @@ public class LocaleDateUtils {
         try {
             YEAR.checkValidValue(year);
         } catch (DateTimeException e) {
-            throw new IOException("Invalid year", e);
+            throw new IOException("Error: Invalid year", e);
         }
     }
 
@@ -27,7 +27,7 @@ public class LocaleDateUtils {
         try {
             MONTH_OF_YEAR.checkValidValue(month);
         } catch (DateTimeException e) {
-            throw new IOException("Invalid month", e);
+            throw new IOException("Error: Invalid month", e);
         }
     }
 }

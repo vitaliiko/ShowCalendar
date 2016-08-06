@@ -72,9 +72,12 @@ public class CalendarPrinter {
     private void printDay(int day, int dayOfWeek) {
         String dayOfMonth = String.valueOf(day);
         dayOfMonth = dayOfMonth.length() == 1 ? " " + dayOfMonth : dayOfMonth;
-        dayOfMonth = dayOfWeek > 5 ? ConsoleConstants.WEEKEND_COLOR + dayOfMonth
-                : ConsoleConstants.DEFAULT_COLOR + dayOfMonth;
-        dayOfMonth = isCurrentDate(day) ? ConsoleConstants.CURRENT_DATE_COLOR + dayOfMonth : dayOfMonth;
+        if (isCurrentDate(day)) {
+            dayOfMonth = ConsoleConstants.CURRENT_DATE_COLOR + dayOfMonth;
+        } else {
+            dayOfMonth = dayOfWeek > 5 ? ConsoleConstants.WEEKEND_COLOR + dayOfMonth
+                    : ConsoleConstants.DEFAULT_COLOR + dayOfMonth;
+        }
         System.out.print(dayOfMonth + " " + ConsoleConstants.CELLS_DELIMITER);
     }
 
@@ -103,10 +106,10 @@ public class CalendarPrinter {
     private void printFirstLine() {
         System.out.print(ConsoleConstants.WEEK_NUMBER_COLOR + "Week" + ConsoleConstants.CELLS_DELIMITER);
         IntStream.rangeClosed(1, 7).forEach(i -> {
-                DayOfWeek dayOfWeek = DayOfWeek.of(i);
-                String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LocaleDateUtils.LOCALE)
-                        + ConsoleConstants.CELLS_DELIMITER;
-                System.out.print(i > 5 ? ConsoleConstants.WEEKEND_COLOR + day : ConsoleConstants.DEFAULT_COLOR + day);
+            DayOfWeek dayOfWeek = DayOfWeek.of(i);
+            String day = dayOfWeek.getDisplayName(TextStyle.SHORT, LocaleDateUtils.LOCALE)
+                    + ConsoleConstants.CELLS_DELIMITER;
+            System.out.print(i > 5 ? ConsoleConstants.WEEKEND_COLOR + day : ConsoleConstants.DEFAULT_COLOR + day);
         });
         System.out.println(ConsoleConstants.DEFAULT_COLOR + ConsoleConstants.HORIZONTAL_LINE_DELIMITER);
     }
