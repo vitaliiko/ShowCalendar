@@ -1,9 +1,7 @@
 import utils.ConsoleConstants;
 import utils.LocaleDateUtils;
 
-import java.time.DayOfWeek;
-import java.time.Year;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 import java.util.stream.IntStream;
@@ -38,7 +36,7 @@ public class CalendarPrinter {
         printTitle(zonedDateTime);
         printFirstLine();
         printWeekNumber(weekOfYear++);
-        printStartMonthLine(startDayOfWeek);
+        printPrevMonth(startDayOfWeek);
 
         int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
@@ -50,6 +48,22 @@ public class CalendarPrinter {
             dayOfWeek++;
         }
         System.out.println(ConsoleConstants.DEFAULT_COLOR + ConsoleConstants.HORIZONTAL_LINE_DELIMITER);
+    }
+
+    private void printPrevMonth(int startDayOfWeek) {
+        Month prevMonth;
+        int prevMonthLength;
+        if (month - 1 == 0) {
+            prevMonth = Month.DECEMBER;
+            prevMonthLength = prevMonth.maxLength();
+        } else {
+            prevMonth = Month.of(month - 1);
+            prevMonthLength = prevMonth.length(Year.isLeap(year));
+        }
+        int prevMonthStartDay = prevMonthLength - startDayOfWeek + 2;
+        for (int i = prevMonthStartDay; i <= prevMonthLength; i++) {
+            System.out.print(ConsoleConstants.OTHR_MONTH_COLOR + i + " " + ConsoleConstants.CELLS_DELIMITER);
+        }
     }
 
     private void printTitle(ZonedDateTime zonedDateTime) {

@@ -10,6 +10,7 @@ public interface ConsoleConstants {
     String CURRENT_DATE_COLOR = "\u001B[36m";
     String DEFAULT_COLOR = "\u001B[0m";
     String WEEK_NUMBER_COLOR = "\u001B[32m";
+    String OTHR_MONTH_COLOR = "\u001B[33m";
 
     String ERROR_COLOR = "\u001B[31m";
 }
