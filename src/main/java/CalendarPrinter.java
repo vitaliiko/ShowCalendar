@@ -43,13 +43,13 @@ public class CalendarPrinter {
         int dayOfWeek = startDayOfWeek;
         for (int i = 1; i <= monthLength; i++) {
             printDay(i, dayOfWeek);
-            if (dayOfWeek % 7 == 0) {
+            if (dayOfWeek % 7 == 0 && i < monthLength) {
                 createNewLine(weekOfYear++);
                 dayOfWeek = 0;
             }
             dayOfWeek++;
         }
-        System.out.println(ConsoleConstants.HORIZONTAL_LINE_DELIMITER);
+        System.out.println(ConsoleConstants.DEFAULT_COLOR + ConsoleConstants.HORIZONTAL_LINE_DELIMITER);
     }
 
     private void printTitle(ZonedDateTime zonedDateTime) {
